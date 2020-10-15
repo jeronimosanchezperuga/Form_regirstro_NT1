@@ -17,7 +17,8 @@ $(function(){
         $("#inputPassword").focus();
         return mail && pass ? true : false;
     })
-
+    // acá itero todos los elementos que tienen la clase form-requerido
+    // para asignarlesel comportamiento ante el evento onblur
     for(i=0; i<requeridos.length;i++){
         // evento=función anónima(){} para hacer algo ante un evento (tiene que estar montado a un elemento)
         requeridos[i].onblur = function(){
