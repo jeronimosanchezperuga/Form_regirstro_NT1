@@ -8,8 +8,8 @@ $(function(){
     // acá se disparan las validaciones(se miran los campos uno por uno y se le asigna la valid o invalid)
     //y se retorna true si está todo bien
     $("#elForm").on('submit', function () {
-        validarNombre(campoNombre);
-        console.log("submit " + campoNombre.val() + " anda?");
+        validarNombre(campoNombre);        
+        validarDni($("#dni"));        
         return false;
     })
         
@@ -80,12 +80,43 @@ function validarNombre(nombre){
         retorno = true;
     }
     esValidoONo(nombre,retorno,msjError);   
-    //return retorno;
+    return retorno;
 }
 
 //validación de DNI, solamente números, no menos de 7 caracteres y no más de 9
 function validarDni(dni){
+    let retorno = false;
+    let msjError = "";
+    if(noEsNumerico(dni)){
+        msjError = "No se permiten símbolos no numéricos (0-9)";
+    }else if(dni.val().length < 7){
+        msjError = "DNI muy corto";
+    }else if(dni.val().length > 9){
+        msjError = "DNI muy largo";
+    }else{
+        msjError = "Ok.";
+        retorno = true;    }
+    esValidoONo(dni,retorno,msjError);   
+    return retorno;
+}
 
+function noEsNumerico(campo){
+    //algunas soluciones que no me convencieron: https://stackoverflow.com/questions/995183/how-to-allow-only-numeric-0-9-in-html-inputbox-using-jquery
+    
+    let value = campo.val();
+    let i=0;
+    let retorno = false;
+    console.log("La cadena evaluada es: " + value + " y tiene un largo de " + value.length);
+
+    while(i<value.length && !retorno){
+        console.log("el ascci del caracter " + value[i] + " es: " + value.charCodeAt(i));
+        if(value.charCodeAt(i) <48 || value.charCodeAt(i) > 57){
+            retorno = true;
+        }else{
+           i++;
+        }
+    }
+    return  retorno;
 }
 
 function campoNoVacio(obj){
