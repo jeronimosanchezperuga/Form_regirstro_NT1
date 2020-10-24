@@ -9,7 +9,8 @@ $(function(){
     //y se retorna true si está todo bien
     $("#elForm").on('submit', function () {
         validarNombre(campoNombre);        
-        validarDni($("#dni"));        
+        validarDni($("#dni"));
+        validarMail($("#mail"));
         return false;
     })
         
@@ -44,10 +45,6 @@ $(function(){
                 
         //     });
         // }
-
-  //Validación de nombre (no menos de 2 caracteres ni más de 40,)
-  
-
 
 })//----------------Hasta acá la función on page load ----------------------------
 
@@ -84,6 +81,7 @@ function validarNombre(nombre){
 }
 
 //validación de DNI, solamente números, no menos de 7 caracteres y no más de 9
+//repite el código de la validación de nombre, MODULARIZAR <<<<<<<<<<<<<<<<<<<<<-------------------------------------
 function validarDni(dni){
     let retorno = false;
     let msjError = "";
@@ -100,21 +98,56 @@ function validarDni(dni){
     return retorno;
 }
 
+//Valicación mail, al menos un @ y un  punto
+function validarMail(campo){
+    let retorno = false;
+    let msjError = "";
+    let cantArrobas = vecesContieneSimbolo(campo.val(),"@");
+    console.log("cant arrobas: " + cantArrobas);
+    if(cantArrobas != 1){
+        msjError ="Se encontraron " + cantArrobas + " @";
+    }else{
+        retorno = true;
+    }
+    esValidoONo(campo,retorno,msjError);
+    return retorno;
+}
+
+function vecesContieneSimbolo(cadena,simbolo){
+    retorno = 0;    
+    console.log("La cadena evaluada es: " + cadena + " y tiene un largo de " + cadena.length);
+    //si el simbolo no es un solo caracter retorna -1 para indicar error
+    if(simbolo.length != 1){
+        console.log("El simbolo está vacío o es muy largo");
+    retorno = -1;
+    }else{
+        //acá iría un foreach pero no me salió
+        for (var i = 0; i < cadena.length; i++) {
+            if(cadena.charAt(i) == simbolo){
+                retorno ++;
+            }
+          }
+    }
+    return retorno;
+}
+
+
 function noEsNumerico(campo){
+    //esto ya está solucionado por el tipo "numeric" del campo en html pero por alguna razón permite ingresar la letra E
     //algunas soluciones que no me convencieron: https://stackoverflow.com/questions/995183/how-to-allow-only-numeric-0-9-in-html-inputbox-using-jquery
     
     let value = campo.val();
     let i=0;
     let retorno = false;
-    console.log("La cadena evaluada es: " + value + " y tiene un largo de " + value.length);
 
     while(i<value.length && !retorno){
         console.log("el ascci del caracter " + value[i] + " es: " + value.charCodeAt(i));
         if(value.charCodeAt(i) <48 || value.charCodeAt(i) > 57){
             retorno = true;
         }else{
-           i++;
+           
         }
+        i++;
     }
     return  retorno;
 }
